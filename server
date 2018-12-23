@@ -1,0 +1,84 @@
+
+#endcoding=utf-8
+
+from threading import Thread
+
+import time
+
+ 
+
+import sys
+
+reload(sys)
+
+sys.setdefaultencoding('utf-8')
+
+ 
+
+from socket import *
+
+ 
+
+def recvData():
+
+	while True:
+
+		recvInfo=udpSocket.recvfrom(1024)
+
+		print("[%s]:%s"%(str(recvInfo[1]),recvInfo[0]))
+
+ 
+
+def sendData():
+
+	while True:
+
+	 	sendInfo="hello"
+
+	 	time.sleep(5)
+
+		udpSocket.sendto(sendInfo.encode("gb2312"),("192.168.80.70",8080))
+
+ 
+
+udpSocket=None
+
+ 
+
+ 
+
+def main():
+
+	global udpSocket
+
+	global destIP
+
+	global destPort
+
+	udpSocket=socket(AF_INET,SOCK_DGRAM)
+
+	udpSocket.bind(("192.168.80.70",4545))  
+
+	
+
+	tr=Thread(target=recvData)
+
+	ts=Thread(target=sendData)
+
+ 
+
+	tr.start()
+
+	ts.start()
+
+ 
+
+	tr.join()
+
+	ts.join()
+
+ 
+
+if __name__=="__main__":
+
+	main()
